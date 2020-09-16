@@ -30,6 +30,43 @@ namespace Practice_SQL
                 Console.WriteLine(context.Cars.Count(x => x.Manufacturer.Name == "BMW"));
 
                 Console.WriteLine(context.Cars.Count(x => x.Manufacturer.Name == "Mitsubishi"));
+
+                // Adding data to database...
+                string make, model, colour;
+
+                Console.WriteLine(context.Cars.Count(x => x.Manufacturer.Name == "Mitsubishi"));
+                Console.Write("Please enter a Make for your new car: ");
+                make = Console.ReadLine();
+
+                Console.Write("Please enter a Model for your new car: ");
+                model = Console.ReadLine();
+
+                Console.Write("Please enter a Colour for your new car: ");
+                colour = Console.ReadLine();
+
+                context.Add(new Car()
+                {
+                    Manufacturer = context.Manufacturers.Where(x => x.Name == make).SingleOrDefault(),
+                    Model = model,
+                    Colour = colour
+                });
+
+
+                // Update Data to database..
+
+                string model1, colour1;
+                Console.Write("Please enter a model to change the colour: ");
+                model1 = Console.ReadLine();
+
+                Console.Write("Please enter the new colour: ");
+                colour1 = Console.ReadLine();
+
+                context.Cars.Where(x => x.Model == model1).SingleOrDefault().Colour = colour1;
+
+               
+
+
+                context.SaveChanges();
             }
         }
 
