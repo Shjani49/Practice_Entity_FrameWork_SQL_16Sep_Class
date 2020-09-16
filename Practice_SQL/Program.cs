@@ -63,8 +63,13 @@ namespace Practice_SQL
 
                 context.Cars.Where(x => x.Model == model1).SingleOrDefault().Colour = colour1;
 
-               
+                // Removing Data from Database..
 
+                string model2;
+                Console.Write("Please enter a model to remove: ");
+                model2 = Console.ReadLine();
+
+                context.Cars.Remove(context.Cars.Where(x => x.Model == model2).SingleOrDefault());
 
                 context.SaveChanges();
             }
