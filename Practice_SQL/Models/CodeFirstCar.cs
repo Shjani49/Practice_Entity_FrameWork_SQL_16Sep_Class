@@ -10,9 +10,11 @@ namespace Practice_SQL.Models
     [Table("code_first_car")]
     public partial class CodeFirstCar
     {
+
+        // All annotations will bind to the next property in the file.
+
         // Declare a primary key.
         [Key]
-       
         // Specifies AUTO_INCREMENT.
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         // Declare the column name and the data type.
