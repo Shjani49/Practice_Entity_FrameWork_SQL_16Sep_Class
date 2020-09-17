@@ -9,11 +9,18 @@ namespace Practice_SQL.Models
     {
         public CarsCodeFirstContext()
         {
+
         }
-        public CarsCodeFirstContext(DbContextOptions<CarsCodeFirstContext>options) : base(options)
+
+        public CarsCodeFirstContext(DbContextOptions<CarsCodeFirstContext> options) : base(options)
         {
 
         }
+
+        // These properties allow the context to be read and written to.
+        public virtual DbSet<CodeFirstCar> Cars { get; set; }
+        public virtual DbSet<Manufacturer> Manufacturers { get; set; }
+
         // Called when we're configuring a database connection.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -22,9 +29,9 @@ namespace Practice_SQL.Models
             {
                 // Initialize the connection to a MySQL server.
                 optionsBuilder
-                   .UseMySql("server=localhost;port=3306;user=root;database=code_first_cars",
-                       // Retreived from PHPMyAdmin under Home > Database Server > Server Version.
-                       x => x.ServerVersion("10.4.14-MariaDB"));
+                    .UseMySql("server=localhost;port=3306;user=root;database=code_first_cars",
+                        // Retreived from PHPMyAdmin under Home > Database Server > Server Version.
+                        x => x.ServerVersion("10.4.14-MariaDB"));
 
                 /*
                     Connection strings are used to define an entire connection profile in one string. They are composed of attributes and values separated by semicolons.
@@ -42,15 +49,31 @@ namespace Practice_SQL.Models
 
         // Called when we're doing database migrations, etc.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {// Declare advanced column configuration for our model.
+        {
+            modelBuilder.Entity<Manufacturer>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_general_ci");
+
+                entity.HasData(
+                    new Manufacturer() { ID = 1, Name = "Chevrolet", YearFounded = 1911 },
+                    new Manufacturer() { ID = 2, Name = "Ford", YearFounded = 1903 },
+                    new Manufacturer() { ID = 3, Name = "Tesla", YearFounded = null },
+                    new Manufacturer() { ID = 4, Name = "Dodge", YearFounded = null },
+                    new Manufacturer() { ID = 5, Name = "Toyota", YearFounded = 1937 },
+                    new Manufacturer() { ID = 6, Name = "Honda", YearFounded = 1946 },
+                    new Manufacturer() { ID = 7, Name = "Mitsubishi", YearFounded = null },
+                    new Manufacturer() { ID = 8, Name = "Nissan", YearFounded = null }
+                    );
+            });
+
+            // Declare advanced column configuration for our model.
             modelBuilder.Entity<CodeFirstCar>(entity =>
             {
                 // If you have foreign keys, declare them here as "HasIndex".
-
-                // Declare the string encoding for our text fields.
-                entity.Property(e => e.Manufacturer)
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.HasIndex(e => e.ManufacturerID)
+                    .HasName("FK_CodeFirstCar_Manufacturer");
 
                 // PLEASE don't try to memorize this. Copy/paste it and change the column name.
                 entity.Property(e => e.Model)
@@ -64,36 +87,20 @@ namespace Practice_SQL.Models
                 entity.Property(e => e.Colour)
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
-                /**  entity.HasData(
-                      new CodeFirstCar()
-                      {
-                          ID = -1,
-                          Manufacturer = "Mitsubishi",
-                          Model = "Lancer",
-                          TrimLevel = "Evolution",
-                          Colour = "Black",
-                          Odometer = 40000
-                      });
-                  entity.HasData(
-                     new CodeFirstCar()
-                     {
-                         ID = 2,
-                         Manufacturer = "Honda",
-                         Model = "Civic",
-                         TrimLevel = "LX",
-                         Colour = "Red",
-                         Odometer = 110000
-                     },
-                     new CodeFirstCar()
-                     {
-                         ID = 3,
-                         Manufacturer = "Dodge",
-                         Model = "Stealth",
-                         TrimLevel = "R/T TT",
-                         Colour = "Blue",
-                         Odometer = 98500
-                     }
-                  );*/
+
+
+                // Enforce the Foreign Key
+                // Specify the relationship between the child and parent
+                entity.HasOne(child => child.ManufacturerRed)
+                // Specify the relationship between the parent and child(ren)
+                    .WithMany(parent => parent.Cars)
+                // Specify the property acting as the foreign key
+                    .HasForeignKey(child => child.ManufacturerID)
+                // Specify delete behaviour
+                    .OnDelete(DeleteBehavior.Restrict)
+                // Name the foreign key
+                    .HasConstraintName("FK_CodeFirstCar_Manufacturer");
+
                 // Generate a random set of data for seeding. Note that this method is only run when "dotnet ef migrations add" is run, so therefore the random set of data will persist if a migration is reverted and reapplied. If you want a new dataset, remove the migration and recreate it (AFTER you've rolled back the migration that added it to the database).
                 string[] makes = new string[] { "Chevrolet", "Dodge", "Ford" };
                 string[] models = new string[] { "Corvette", "Durango", "Fusion" };
@@ -105,7 +112,7 @@ namespace Practice_SQL.Models
                     cars.Add(new CodeFirstCar()
                     {
                         ID = i,
-                        Manufacturer = makes[rng.Next(0, 3)],
+                        ManufacturerID = 1,
                         Model = models[rng.Next(0, 3)],
                         TrimLevel = trims[rng.Next(0, 3)],
                         Colour = "Black",
