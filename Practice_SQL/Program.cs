@@ -32,6 +32,15 @@ namespace Practice_SQL
              5) Modify context OnModelCreating to represent the models that you created.
                 5a) Add a modelBuild.Entity<MODEL_NAME>() call for each model that will set things like the foreign key mapping and the text encoding.
 
+            Generate the Migration:
+            Run "dotnet ef migrations add InitialCreate" in package manager console.
+            You should then have a Migrations folder created.
+            Push the Migration to the Database:
+            Run "dotnet ef database update".
+            Assuming no errors, your database should now be there.
+            If you make a mistake, you can remove and recreate your model:
+            Run "dotnet ef migrations remove"
+
             */
 
         }

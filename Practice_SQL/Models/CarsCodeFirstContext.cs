@@ -50,20 +50,20 @@ namespace Practice_SQL.Models
                 // Declare the string encoding for our text fields.
                 entity.Property(e => e.Manufacturer)
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utfmb4_general_ci");
+                    .HasCollation("utf8mb4_general_ci");
 
                 // PLEASE don't try to memorize this. Copy/paste it and change the column name.
                 entity.Property(e => e.Model)
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utfmb4_general_ci");
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.TrimLevel)
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utfmb4_general_ci");
+                    .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Colour)
                     .HasCharSet("utf8mb4")
-                    .HasCollation("utfmb4_general_ci");
+                    .HasCollation("utf8mb4_general_ci");
             });
 
             // Call the partial method in case we add some stuff to another file later.
