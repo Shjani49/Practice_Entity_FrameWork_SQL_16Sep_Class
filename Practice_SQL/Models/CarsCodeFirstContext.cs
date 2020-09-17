@@ -64,11 +64,59 @@ namespace Practice_SQL.Models
                 entity.Property(e => e.Colour)
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
+                /**  entity.HasData(
+                      new CodeFirstCar()
+                      {
+                          ID = -1,
+                          Manufacturer = "Mitsubishi",
+                          Model = "Lancer",
+                          TrimLevel = "Evolution",
+                          Colour = "Black",
+                          Odometer = 40000
+                      });
+                  entity.HasData(
+                     new CodeFirstCar()
+                     {
+                         ID = 2,
+                         Manufacturer = "Honda",
+                         Model = "Civic",
+                         TrimLevel = "LX",
+                         Colour = "Red",
+                         Odometer = 110000
+                     },
+                     new CodeFirstCar()
+                     {
+                         ID = 3,
+                         Manufacturer = "Dodge",
+                         Model = "Stealth",
+                         TrimLevel = "R/T TT",
+                         Colour = "Blue",
+                         Odometer = 98500
+                     }
+                  );*/
+                // Generate a random set of data for seeding. Note that this method is only run when "dotnet ef migrations add" is run, so therefore the random set of data will persist if a migration is reverted and reapplied. If you want a new dataset, remove the migration and recreate it (AFTER you've rolled back the migration that added it to the database).
+                string[] makes = new string[] { "Chevrolet", "Dodge", "Ford" };
+                string[] models = new string[] { "Corvette", "Durango", "Fusion" };
+                string[] trims = new string[] { "High Country", "R/T", "Awesome" };
+                Random rng = new Random();
+                List<CodeFirstCar> cars = new List<CodeFirstCar>();
+                for (int i = 1; i <= 50; i++)
+                {
+                    cars.Add(new CodeFirstCar()
+                    {
+                        ID = i,
+                        Manufacturer = makes[rng.Next(0, 3)],
+                        Model = models[rng.Next(0, 3)],
+                        TrimLevel = trims[rng.Next(0, 3)],
+                        Colour = "Black",
+                        Odometer = rng.Next(1000, 300001)
+                    });
+                }
+
+
+                // Seed data is used for testing environments, it's kind of the equivalent of what we did with INSERTing test data using SQL.
+                entity.HasData(cars.ToArray());
             });
-
-            // Call the partial method in case we add some stuff to another file later.
-            OnModelCreatingPartial(modelBuilder);
-
 
             // Call the partial method in case we add some stuff to another file later.
             OnModelCreatingPartial(modelBuilder);
@@ -77,5 +125,4 @@ namespace Practice_SQL.Models
         // Not technically needed, but the scaffolding generates it for later use, so we can add it if we want for future-proofing.
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-      
 }
