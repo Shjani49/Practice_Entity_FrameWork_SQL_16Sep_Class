@@ -54,6 +54,18 @@ namespace Practice_SQL
             Ensure that the database has been rolled back to before the migration to be removed before removing it.
            
             UNDER NO CIRCUMSTANCES SHOULD YOU MODIFY THE Down() METHOD OF A MIGRATION THAT HAS BEEN APPLIED TO THE DATABASE. IF YOU MUST, ROLL IT BACK FIRST.
+
+             Foreign Keys:
+            (In the file containing the foreign key)
+            -Ensure that the foriegn key property is present (as a normal field)
+            -Add a virtual foreign key property to the bottom of the file.
+            (In the file the foreign key points to)
+            -Add an inverse list virtual foreign key property.
+            -Add a constructor that initializes a empty hashset for the virtual property.
+            (In the context)
+            -Update the context to enforce the constraint.
+                -Add the entity.HasX() calls
+                -Add the entity.HasIndex() call(s)
             */
         }
     }

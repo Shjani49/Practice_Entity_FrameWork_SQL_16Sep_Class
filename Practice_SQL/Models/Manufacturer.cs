@@ -10,6 +10,13 @@ namespace Practice_SQL.Models
     [Table("manufacturer")]
     public partial class Manufacturer
     {
+
+        // Initialize the navigation property.
+        public Manufacturer()
+        {
+            Cars = new HashSet<CodeFirstCar>();
+        }
+
         [Key]
         [Column("id", TypeName = "int(10)")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
